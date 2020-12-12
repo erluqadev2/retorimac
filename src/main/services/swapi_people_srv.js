@@ -1,15 +1,24 @@
 'use strict'
 
 const swapiPeople = require('../integrations/swapi/swapi_people')
-const {createResponse: createResponse} = require('../commons/helpers')
+const peopleTable = require('../database/people_table')
+const mapping = require('../mapper/mapping')
+const {v4: uuidv4} = require('uuid')
 
-const getPeople = (event, context, callback) => {
-    const id = event.pathParameters.id
-    swapiPeople.getPerson(id).then(result => {
-        callback(error, createResponse(200, result))
+const getPeople = (id) => {
+    return swapiPeople.getPerson(id).then(result => {
+        return mapping.map(mapping.KEY_MAPPERS.PEOPLE, result)
+    })
+}
+
+const getAndSavePeople = (id) => {
+    return getPeople(id).then(result => {
+        result.ID = uuidv4()
+        return peopleTable.savePeople(result)
     })
 }
 
 module.exports = {
-    getPeople: getPeople
+    getPeople: getPeople,
+    getAndSavePeople: getAndSavePeople
 }

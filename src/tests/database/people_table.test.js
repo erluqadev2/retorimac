@@ -45,7 +45,6 @@ test('savePeeple result is object and ID is string', async () => {
 
     saveData.ID = uuidv4()
 
-    peopleTable.setTable('people-table')
     expect.assertions(2)
 
     const data = await peopleTable.savePeople(saveData)
@@ -95,7 +94,6 @@ test('savePeeple result validate key transformation and compare value', async ()
     
     saveData2.ID = uuidv4()
 
-    peopleTable.setTable('people-table')
     expect.assertions(1)
 
     const data = await peopleTable.savePeople(saveData2)

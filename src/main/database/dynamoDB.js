@@ -30,7 +30,6 @@ const getItem = (table, keys) => {
         TableName: table,
         Key: keys
     }
-    console.log(params)
     return dynamo.get(params).promise()
         .then(result => {
             return result.Item

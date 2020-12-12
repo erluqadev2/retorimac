@@ -20,27 +20,41 @@ provider:
       Action:
         - "dynamodb:GetItem"
         - "dynamodb:PutItem"
+        - "dynamodb:Scan"
       Resource:
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.envs.PEOPLE_TABLE_NAME}"
 
 functions:
   savePeople:
-    handler: src/main/services/people_srv.savePeople
+    handler: src/main/apis/people_api.savePeople
     events:
       - http:
           method: post
           path: /people
   getPeople:
-    handler: src/main/services/people_srv.getPeople
+    handler: src/main/apis/people_api.getPeople
     events:
       - http:
           method: get
           path: /people/{ID}
-  swapiGetPeople:
-    handler: src/main/services/swapi_people_srv.getPeople
+  getAllPeople:
+    handler: src/main/apis/people_api.getAllPeople
     events:
-      - http: get
-        path: /swapi/people/{id}
+      - http:
+          method: get
+          path: /people
+  swapiGetPeople:
+    handler: src/main/apis/swapi_people_api.getPeople
+    events:
+      - http:
+          method: get
+          path: /swapi/people/{id}
+  swapiGetAndSavePeople:
+    handler: src/main/apis/swapi_people_api.getAndSavePeople
+    events:
+      - http:
+          method: get
+          path: /swapi/people/{id}/save
 
 resources:
   Resources:

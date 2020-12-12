@@ -2,18 +2,13 @@
 
 const peopleTable = require('../database/people_table')
 const {v4: uuidv4} = require('uuid')
-const {createResponse: createResponse} = require('../commons/helpers')
 const mapping = require('../mapper/mapping')
 
-const KEY_LANG = process.env.KEY_LANG
-const LANG_ES = process.env.LANG_ES
-const LANG_EN = process.env.LANG_EN
+const KEY_LANG = process.env.KEY_LANG || 'LANG'
+const LANG_ES = process.env.LANG_ES || 'ES'
+const LANG_EN = process.env.LANG_EN || 'EN'
 
-const savePeople = (event, context, callback) => {
-    console.log('savePeople')
-    let item = JSON.parse(event.body)
-    console.log(item)
-
+const savePeople = (item) => {
     const lang = Object.entries(item).filter(el => el[0] == KEY_LANG)
     if (lang.length > 0 && lang[0][1] == LANG_EN) {
         // english
@@ -22,28 +17,27 @@ const savePeople = (event, context, callback) => {
 
     item.ID = uuidv4()
 
-    peopleTable.savePeople(item).then(response => {
-        console.log('response : ' + response)
-        callback(null, createResponse(200, response))
+    return peopleTable.savePeople(item).then(response => {
+        return response
     })
 };
 
-const getPeople = (event, context, callback) => {
-    console.log('getPeople')
-    const peopleId = event.pathParameters.ID
-    console.log('id : ' + peopleId)
-
-    peopleTable.getPeople(peopleId).then(response => {
-        if (typeof response == 'undefined') {
-            response = 'People no encontrado'
+const getPeople = (peopleId) => {
+    return peopleTable.getPeople(peopleId).then(response => {
+        if (response == 'undefined' || typeof response != 'object') {
+            response = 'People not found'
         }
-        console.log('response : ' + response)
-        
-        callback(null, createResponse(200, response))
+        //console.log('response : ', response)
+        return response
     })
+}
+
+const getAllPeople = () => {
+    return peopleTable.getAllPeople()
 }
 
 module.exports = {
     savePeople: savePeople,
-    getPeople: getPeople
+    getPeople: getPeople,
+    getAllPeople: getAllPeople
 }
