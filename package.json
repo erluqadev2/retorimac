@@ -1,0 +1,16 @@
+{
+  "name": "reto_slsaws_nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "erluqadev@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.808.0",
+    "uuid": "^8.3.2"
+  }
+}
