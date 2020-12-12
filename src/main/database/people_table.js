@@ -1,37 +1,27 @@
 'use strict'
 
-const AWS = require('aws-sdk')
-const dynamo = new AWS.DynamoDB.DocumentClient()
+const dynamoDB = require('./dynamoDB')
 
-const TABLE_NAME = process.env.PEOPLE_TABLE_NAME
+let TABLE_NAME = process.env.PEOPLE_TABLE_NAME
 
 const savePeople = item => {
-    const params = {
-        TableName: TABLE_NAME,
-        Item: item
-    }
-
-    return dynamo.put(params).promise()
-        .then(() => {
-            return item.ID
-        })
+    return dynamoDB.saveItem(TABLE_NAME, item)
 }
 
 const getPeople = itemId => {
-    const params = {
-        TableName: TABLE_NAME,
-        Key: {
-            ID: itemId
-        }
+    console.log('people_table.getPeople')
+    const keys = {
+        ID: itemId
     }
+    return dynamoDB.getItem(TABLE_NAME, keys)
+}
 
-    return dynamo.get(params).promise()
-        .then(result => {
-            return result.Item
-        })
+const setTable = (tableName) => {
+    TABLE_NAME = tableName
 }
 
 module.exports = {
     savePeople: savePeople,
-    getPeople: getPeople
+    getPeople: getPeople,
+    setTable: setTable
 }

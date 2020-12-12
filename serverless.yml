@@ -40,7 +40,7 @@ functions:
     handler: src/main/services/swapi_people_srv.getPeople
     events:
       - http: get
-        path: /swapi/people
+        path: /swapi/people/{id}
 
 resources:
   Resources:

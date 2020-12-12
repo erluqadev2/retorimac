@@ -2,8 +2,8 @@
 
 const swapi = require('swapi-node');
 
-const getPerson = () => {
-    return swapi.getPerson(1).then((result) => {
+const getPerson = (id) => {
+    return swapi.getPerson(id).then((result) => {
         return result
     })
 }
