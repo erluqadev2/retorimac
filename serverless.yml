@@ -36,6 +36,11 @@ functions:
       - http:
           method: get
           path: /people/{ID}
+  swapiGetPeople:
+    handler: src/main/services/swapi_people_srv.getPeople
+    events:
+      - http: get
+        path: /swapi/people
 
 resources:
   Resources:
